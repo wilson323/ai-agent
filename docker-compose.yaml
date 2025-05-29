@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3009:3009"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - DOCKER_CONTAINER=true
+      - PORT=3009
+      - POSTGRES_USER=${POSTGRES_USER:-root}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ZKTeco##123}
+      - POSTGRES_DB=${POSTGRES_DB:-agent_config}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5452
+    depends_on:
+      - db
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3009/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  db:
+    image: postgres:14-alpine
+    container_name: chat-postgres
+    ports:
+      - "5452:5452"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-root}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ZKTeco##123}
+      - POSTGRES_DB=${POSTGRES_DB:-agent_config}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:

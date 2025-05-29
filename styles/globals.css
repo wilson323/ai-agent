@@ -1,0 +1,378 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* 更浅更通透的用户气泡渐变色 */
+.message-bubble-user {
+  background: linear-gradient(120deg, rgba(180,255,210,0.13) 0%, rgba(120,230,170,0.16) 60%, rgba(255,255,255,0.10) 100%);
+  box-shadow: 0 8px 32px 0 rgba(120,230,170,0.08), 0 1.5px 8px 0 rgba(120,230,170,0.06);
+  border: 1.5px solid rgba(120,230,170,0.13);
+  color: #222;
+  position: relative;
+  overflow: hidden;
+}
+.message-bubble-user::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0.13) 0%, rgba(120,230,170,0.08) 100%);
+  opacity: 0.45;
+  z-index: 1;
+}
+
+.message-bubble-ai {
+  background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(180,220,180,0.13) 60%, rgba(120,180,220,0.10) 100%);
+  box-shadow: 0 8px 32px 0 rgba(120,180,120,0.10), 0 1.5px 8px 0 rgba(120,180,120,0.08);
+  border: 1.5px solid rgba(120,180,120,0.13);
+  color: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+}
+.message-bubble-ai::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0.13) 0%, rgba(120,180,220,0.08) 100%);
+  opacity: 0.4;
+  z-index: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  .message-bubble-user {
+    background: linear-gradient(120deg, rgba(80,200,120,0.10) 0%, rgba(60,120,80,0.13) 60%, rgba(40,60,40,0.13) 100%);
+    box-shadow: 0 8px 32px 0 rgba(80,200,120,0.06), 0 1.5px 8px 0 rgba(80,200,120,0.04);
+    border: 1.5px solid rgba(80,200,120,0.08);
+    color: #e6ffe6;
+  }
+  .message-bubble-user::after {
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(120,230,170,0.10) 100%);
+    opacity: 0.18;
+  }
+  .message-bubble-ai {
+    background: linear-gradient(120deg, rgba(60,80,60,0.18) 0%, rgba(120,180,120,0.13) 60%, rgba(80,120,180,0.10) 100%);
+    box-shadow: 0 8px 32px 0 rgba(120,180,120,0.08), 0 1.5px 8px 0 rgba(120,180,120,0.06);
+    border: 1.5px solid rgba(120,180,120,0.10);
+    color: #e6f7ff;
+  }
+  .message-bubble-ai::after {
+    background: linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(120,180,220,0.10) 100%);
+    opacity: 0.18;
+  }
+}
+
+/* 聊天主区域全局背景动效 */
+.chat-bg-effect {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+/* 白天模式：动感光斑渐变 */
+@media (prefers-color-scheme: light) {
+  .chat-bg-effect {
+    background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.45) 0%, rgba(80,200,120,0.10) 60%, transparent 100%),
+                radial-gradient(ellipse at 80% 80%, rgba(255,255,200,0.18) 0%, rgba(80,200,120,0.08) 60%, transparent 100%);
+    animation: chatBgGlowMove 12s ease-in-out infinite alternate;
+    opacity: 0.7;
+  }
+  @keyframes chatBgGlowMove {
+    0% { background-position: 30% 20%, 80% 80%; }
+    100% { background-position: 40% 30%, 70% 70%; }
+  }
+}
+
+/* 夜间模式：星空+流星 */
+@media (prefers-color-scheme: dark) {
+  .chat-bg-effect {
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.12) 1.2px, transparent 1.2px),
+      radial-gradient(circle at 60% 70%, rgba(255,255,255,0.09) 1.1px, transparent 1.1px),
+      radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 1.3px, transparent 1.3px),
+      radial-gradient(circle at 40% 80%, rgba(255,255,255,0.10) 1.0px, transparent 1.0px),
+      radial-gradient(circle at 70% 50%, rgba(255,255,255,0.07) 1.5px, transparent 1.5px),
+      radial-gradient(circle at 30% 60%, rgba(255,255,255,0.09) 1.1px, transparent 1.1px);
+    animation: chatStarTwinkle 8s infinite alternate;
+    opacity: 0.7;
+  }
+  @keyframes chatStarTwinkle {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.85; }
+    100% { opacity: 0.7; }
+  }
+  /* 流星 */
+  .chat-bg-effect::after {
+    content: '';
+    position: absolute;
+    left: -20%;
+    top: 10%;
+    width: 140%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.0) 60%, rgba(255,255,255,0.25) 80%, rgba(255,255,255,0.0) 100%);
+    filter: blur(2.5px);
+    animation: chatShootingStar 18s linear infinite;
+    animation-delay: 3s;
+  }
+  @keyframes chatShootingStar {
+    0%, 95% { opacity: 0; transform: translateX(0) translateY(0) scaleX(0.7) scaleY(1);}
+    96% { opacity: 1; transform: translateX(0) translateY(0) scaleX(0.7) scaleY(1);}
+    98% { opacity: 1; transform: translateX(120px) translateY(36px) scaleX(1.2) scaleY(0.7);}
+    100% { opacity: 0; transform: translateX(240px) translateY(72px) scaleX(0.7) scaleY(1);}
+  }
+}
+
+/* 全局滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 180, 120, 0.18);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(80, 200, 120, 0.28);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: rgba(180, 220, 180, 0.13);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(120, 180, 120, 0.22);
+  }
+}
+
+/* Firefox 滚动条美化 */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120,180,120,0.18) transparent;
+}
+@media (prefers-color-scheme: dark) {
+  html {
+    scrollbar-color: rgba(180,220,180,0.13) transparent;
+  }
+}
+
+.dark pre, .dark code {
+  background: #181c23 !important;
+  color: #e6e6e6 !important;
+  border-radius: 0.75rem !important;
+  border: 1.5px solid #23272f !important;
+  box-shadow: 0 2px 12px 0 rgba(40,60,40,0.10);
+}
+.dark blockquote {
+  background: rgba(40,60,40,0.13) !important;
+  color: #b6e6b6 !important;
+  border-left: 4px solid #4ade80 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+/* 气泡内交互按钮样式 */
+.bubble-interactive-ai {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(120, 180, 120, 0.25) !important;
+  color: #1a1a1a !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(120, 180, 120, 0.1) !important;
+}
+
+.bubble-interactive-ai:hover {
+  background: rgba(120, 180, 120, 0.15) !important;
+  border-color: rgba(120, 180, 120, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(120, 180, 120, 0.2) !important;
+}
+
+.bubble-interactive-user {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(120, 230, 170, 0.25) !important;
+  color: #1a1a1a !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(120, 230, 170, 0.1) !important;
+}
+
+.bubble-interactive-user:hover {
+  background: rgba(120, 230, 170, 0.15) !important;
+  border-color: rgba(120, 230, 170, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(120, 230, 170, 0.2) !important;
+}
+
+/* 选中状态的交互按钮 */
+.bubble-interactive-selected {
+  background: #6cb33f !important;
+  border: 1px solid #6cb33f !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(108, 179, 63, 0.3) !important;
+}
+
+.bubble-interactive-selected:hover {
+  background: #6cb33f !important;
+  border: 1px solid #6cb33f !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(108, 179, 63, 0.3) !important;
+}
+
+/* 禁用状态的交互按钮 */
+.bubble-interactive-disabled {
+  background: rgba(200, 200, 200, 0.3) !important;
+  border: 1px solid rgba(200, 200, 200, 0.5) !important;
+  color: #999 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+.bubble-interactive-disabled:hover {
+  background: rgba(200, 200, 200, 0.3) !important;
+  border: 1px solid rgba(200, 200, 200, 0.5) !important;
+  color: #999 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* 夜间模式下的气泡内交互按钮 */
+@media (prefers-color-scheme: dark) {
+  .bubble-interactive-ai {
+    background: rgba(60, 80, 60, 0.4) !important;
+    border: 1px solid rgba(120, 180, 120, 0.3) !important;
+    color: #e6f7ff !important;
+    box-shadow: 0 2px 8px rgba(120, 180, 120, 0.15) !important;
+  }
+
+  .bubble-interactive-ai:hover {
+    background: rgba(120, 180, 120, 0.25) !important;
+    border-color: rgba(120, 180, 120, 0.5) !important;
+    box-shadow: 0 4px 12px rgba(120, 180, 120, 0.25) !important;
+  }
+
+  .bubble-interactive-user {
+    background: rgba(80, 200, 120, 0.2) !important;
+    border: 1px solid rgba(80, 200, 120, 0.3) !important;
+    color: #e6ffe6 !important;
+    box-shadow: 0 2px 8px rgba(80, 200, 120, 0.15) !important;
+  }
+
+  .bubble-interactive-user:hover {
+    background: rgba(80, 200, 120, 0.3) !important;
+    border-color: rgba(80, 200, 120, 0.5) !important;
+    box-shadow: 0 4px 12px rgba(80, 200, 120, 0.25) !important;
+  }
+
+  /* 夜间模式下的选中状态 */
+  .dark .bubble-interactive-selected {
+    background: #6cb33f !important;
+    border: 1px solid #6cb33f !important;
+    color: white !important;
+  }
+
+  /* 夜间模式下的禁用状态 */
+  .dark .bubble-interactive-disabled {
+    background: rgba(100, 100, 100, 0.3) !important;
+    border: 1px solid rgba(100, 100, 100, 0.5) !important;
+    color: #666 !important;
+  }
+}
