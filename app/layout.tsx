@@ -1,9 +1,9 @@
 import type React from "react"
 import "@/app/globals.css"
+import "@copilotkit/react-ui/styles.css";
 import type { Metadata } from "next"
 import { Nunito_Sans, Montserrat } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { Providers } from "@/components/providers"
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -31,10 +31,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${nunitoSans.variable} ${montserrat.variable} font-sans`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <ThemeToggle />
+        <Providers>
           {children}
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )
