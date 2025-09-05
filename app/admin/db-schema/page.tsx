@@ -9,12 +9,46 @@ import { Dialog, DialogContent, DialogTitle, DialogFooter } from "@/components/u
 import { useTranslation } from '@/lib/i18n'
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 
-interface TableInfo {
-  name: string
-  columns: { name: string; type: string; allowNull: boolean; defaultValue: any }[]
+interface ColumnInfo {
+  name: string;
+  type: string;
+  allowNull: boolean;
+  defaultValue: string | number | null;
 }
 
-function getFieldDiff(modelField: any, dbField: any) {
+interface TableInfo {
+  name: string
+  columns: ColumnInfo[]
+}
+
+interface DiffInfo {
+  table: string;
+  missingFields: string[];
+  extraFields: string[];
+  typeMismatch: string[];
+  nullMismatch: string[];
+  defaultMismatch: string[];
+  missingIndexes: string[];
+  missingUniques: string[];
+  missingForeignKeys: string[];
+}
+
+interface HealthInfo {
+  db?: 'ok' | 'fail';
+  api?: 'ok' | 'fail';
+  agent?: 'ok' | 'fail';
+}
+
+interface PerfInfo {
+  cpu?: number[];
+  memory?: {
+    heapUsed: number;
+    [key: string]: unknown;
+  };
+}
+
+
+function getFieldDiff(modelField: ColumnInfo | undefined, dbField: ColumnInfo | undefined) {
   if (!modelField) return 'missing'; // 数据库有，模型无
   if (!dbField) return 'new';        // 模型有，数据库无
   if (
@@ -25,7 +59,7 @@ function getFieldDiff(modelField: any, dbField: any) {
   return 'same';
 }
 
-function renderFieldCell(field: any, diffType: string, tooltip?: string, key?: string) {
+function renderFieldCell(field: string | number | boolean, diffType: string, tooltip?: string, key?: string) {
   let className = '';
   if (diffType === 'new') className = 'bg-green-100 text-green-800';
   if (diffType === 'missing') className = 'bg-red-100 text-red-800';
@@ -52,7 +86,7 @@ export default function DbSchemaPage() {
   const [syncing, setSyncing] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
-  const [diffs, setDiffs] = useState<any[]>([])
+  const [diffs, setDiffs] = useState<DiffInfo[]>([])
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [logs, setLogs] = useState<string[]>([])
@@ -90,7 +124,7 @@ export default function DbSchemaPage() {
   const fetchLogs = useCallback(() => {
     fetch(`/api/admin/db-schema/log?page=${logPage}&pageSize=${logPageSize}`)
       .then(res => res.json())
-      .then(data => {
+      .then((data: { logs?: string[]; total?: number }) => {
         setLogs(data.logs || [])
         setLogTotal(data.total || 0)
       })
@@ -116,11 +150,12 @@ export default function DbSchemaPage() {
         // CSV
         const rows = [
           ['表名', '字段名', '类型', '可空', '默认值'],
-          ...data.tables.flatMap((table: any) =>
-            table.columns.map((col: any) => [table.name, col.name, col.type, col.allowNull ? '是' : '否', col.defaultValue ?? ''])
+//... (rest of the file)
+          ...data.tables.flatMap((table: TableInfo) =>
+            table.columns.map((col: ColumnInfo) => [table.name, col.name, col.type, col.allowNull ? '是' : '否', col.defaultValue ?? ''])
           )
         ]
-        const csv = rows.map(r => r.map((v: any) => `"${String(v).replace(/"/g, '""')}` ).join(',')).join('\n')
+        const csv = rows.map(r => r.map((v: string | number | boolean) => `"${String(v).replace(/"/g, '""')}` ).join(',')).join('\n')
         const blob = new Blob([csv], { type: 'text/csv' })
         const url = URL.createObjectURL(blob)
         const a = document.createElement('a')
@@ -139,7 +174,8 @@ export default function DbSchemaPage() {
     const res = await fetch("/api/admin/db-schema/tables")
     const data = await res.json()
     // 这里只做简单示例，实际应用可用sequelize-auto等工具生成完整SQL
-    const sql = data.tables.map((table: any) => `-- ${table.name}\nCREATE TABLE IF NOT EXISTS \"${table.name}\" (...);`).join('\n\n')
+//... (rest of the file)
+    const sql = data.tables.map((table: TableInfo) => `-- ${table.name}\nCREATE TABLE IF NOT EXISTS \"${table.name}\" (...);`).join('\n\n')
     const blob = new Blob([sql], { type: 'text/sql' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -183,11 +219,12 @@ export default function DbSchemaPage() {
     }
   }
 
+//... (rest of the file)
   // 健康监控
-  const [health, setHealth] = useState<any>(null)
+  const [health, setHealth] = useState<HealthInfo | null>(null)
   useEffect(() => { fetch('/api/health').then(r=>r.json()).then(setHealth) }, [])
   // 性能分析
-  const [perf, setPerf] = useState<any>(null)
+  const [perf, setPerf] = useState<PerfInfo | null>(null)
   useEffect(() => { fetch('/api/admin/monitor/performance').then(r=>r.json()).then(setPerf) }, [])
   // 备份恢复
   const [backups, setBackups] = useState<string[]>([])
